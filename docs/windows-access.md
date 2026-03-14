@@ -142,6 +142,8 @@ npm install
 npm run setup:windows
 ```
 
+> **Nota:** O entrypoint oficial de validação do projeto é `scripts/preflight.js`. Para manter compatibilidade com diferentes ambientes, use sempre `npm run preflight` ou rode os scripts de setup/dev que já contêm essa proteção embutida.
+
 ### Permissão negada no push
 Configure suas credenciais Git:
 ```powershell

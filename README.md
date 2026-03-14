@@ -132,6 +132,8 @@ npm install
 npm run setup:windows
 ```
 
+> **Nota:** O entrypoint oficial de validação do projeto é `scripts/preflight.js`. Para manter compatibilidade com ambientes e ferramentas externas, sempre acione a validação via `npm run preflight`.
+
 ## Criando Pull Request
 
 Após publicar a branch `work`, abra o PR no navegador:
