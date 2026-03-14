@@ -145,6 +145,8 @@ npm run setup:windows
 ```
 
 ### E se o auto-reparo reportar que os arquivos não estão em origin/work?
+Dica de diagnóstico: Você pode confirmar se os apps estão no remote via `git ls-tree origin/work -- apps`.
+
 Vá ao seu computador ou pasta onde o `frontend` e `backend` foram programados e faça o upload:
 ```sh
 git add apps/
