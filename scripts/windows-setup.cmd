@@ -1,6 +1,17 @@
 @echo off
 setlocal
 
+echo [0/4] Verificando estrutura do projeto...
+if not exist apps\backend\package.json goto err_struct
+if not exist apps\frontend\package.json goto err_struct
+goto ok_struct
+
+:err_struct
+echo [ERRO] Estrutura incompleta! Pastas apps\backend ou apps\frontend ausentes.
+echo Certifique-se de baixar/clonar o repositorio por completo.
+exit /b 1
+
+:ok_struct
 echo [1/4] Instalando dependencias...
 call npm install
 if errorlevel 1 exit /b 1

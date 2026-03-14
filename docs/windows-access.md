@@ -127,6 +127,18 @@ git remote -v
 2. Se necessário, force o push: `git push -u origin work --force`
 3. Verifique no navegador: https://github.com/Thiagomrsouza/compare/branches
 
+### "concurrently" não reconhecido ou erros parecidos no `npm run dev`
+Isso normalmente significa que o projeto está incompleto ou as dependências não foram instaladas corretamente.
+1. Execute a validação da estrutura:
+```powershell
+npm run preflight
+```
+2. Se informar erro, certifique-se de que as pastas `apps/backend` e `apps/frontend` existem. Você pode não ter clonado todas as pastas.
+3. Repita o comando de setup completo:
+```powershell
+npm run setup:windows
+```
+
 ### Permissão negada no push
 Configure suas credenciais Git:
 ```powershell

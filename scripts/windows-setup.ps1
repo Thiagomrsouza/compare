@@ -1,5 +1,12 @@
 $ErrorActionPreference = "Stop"
 
+Write-Host "`n=== [0/4] Verificando estrutura do projeto... ===" -ForegroundColor Cyan
+if (-not (Test-Path "apps\backend\package.json") -or -not (Test-Path "apps\frontend\package.json")) {
+    Write-Host "[ERRO] Estrutura incompleta! Pastas apps/backend ou apps/frontend ausentes ou sem package.json." -ForegroundColor Red
+    Write-Host "Certifique-se de baixar/clonar o repositorio por completo." -ForegroundColor Yellow
+    exit 1
+}
+
 Write-Host "`n=== [1/4] Instalando dependencias... ===" -ForegroundColor Cyan
 npm install
 
