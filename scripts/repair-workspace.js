@@ -15,7 +15,8 @@ console.log('\n=== Iniciando auto-reparo do Workspace ===');
 console.log('Tentando restaurar apps/ diretamente da branch remota (origin/work)...\n');
 
 run('git fetch origin work');
-run('git checkout origin/work -- apps/backend apps/frontend');
+const backendRestore = run('git checkout origin/work -- apps/backend');
+const frontendRestore = run('git checkout origin/work -- apps/frontend');
 
 const missing = [];
 if (!fs.existsSync('apps/backend/package.json')) missing.push('apps/backend');
@@ -32,6 +33,12 @@ if (missing.length === 0) {
 } else {
   console.error('\n[ERRO] Nao foi possivel restaurar os seguintes modulos:');
   missing.forEach(m => console.error(`  - ${m}`));
-  console.error('\nA branch origin/work no GitHub pode ainda nao conter esses repositorios. Verifique se fez o push correto.');
+  console.error('\nA branch origin/work no GitHub ainda NAO contém esses repositorios. O código fonte ainda não foi publicado!');
+  console.error('=== COMO CORRIGIR (No ambiente onde o código foi criado) ===');
+  console.error('1. cd /caminho/do/projeto/original');
+  console.error('2. git add apps/');
+  console.error('3. git commit -m "feat: adicionar codigo fonte dos apps"');
+  console.error('4. git push origin work');
+  console.error('Depois que rodar esses quatro passos lá, tente novamente rodar "npm run repair:workspace" aqui.');
   process.exit(1);
 }

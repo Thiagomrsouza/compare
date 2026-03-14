@@ -130,6 +130,16 @@ npm install
 npm run setup:windows
 ```
 
+### Se o auto-reparo não achar as pastas em `origin/work`
+Isso significa que você nunca enviou as pastas para o GitHub na branch `work`. Vá para onde elas foram criadas:
+```bash
+# Onde os arquivos originais estão:
+git add apps/
+git commit -m "feat: adicionar apps"
+git push origin work
+```
+Depois volte aqui e rode `npm run repair:workspace` de novo.
+
 > **Nota:** O entrypoint oficial de validação do projeto é `scripts/preflight.js`. Para manter compatibilidade com ambientes e ferramentas externas, sempre acione a validação via `npm run preflight`.
 
 ## Criando Pull Request

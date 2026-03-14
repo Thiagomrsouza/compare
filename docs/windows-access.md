@@ -144,6 +144,15 @@ npm install
 npm run setup:windows
 ```
 
+### E se o auto-reparo reportar que os arquivos não estão em origin/work?
+Vá ao seu computador ou pasta onde o `frontend` e `backend` foram programados e faça o upload:
+```sh
+git add apps/
+git commit -m "feat: adicionar apps"
+git push origin work
+```
+Na volta tente novamente rodar o auto-reparo!
+
 > **Nota:** O entrypoint oficial de validação do projeto é `scripts/preflight.js`. Para manter compatibilidade com diferentes ambientes, use sempre `npm run preflight` ou rode os scripts de setup/dev que já contêm essa proteção embutida.
 
 ### Permissão negada no push
