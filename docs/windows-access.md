@@ -168,6 +168,21 @@ Na volta tente novamente rodar o auto-reparo!
 
 > **Nota:** O entrypoint oficial de validação do projeto é `scripts/preflight.js`. Para manter compatibilidade com diferentes ambientes, use sempre `npm run preflight` ou rode os scripts de setup/dev que já contêm essa proteção embutida.
 
+### O preflight parece rodar mas vejo a página padrão do Vite ("Vite + React")
+
+O `npm run preflight` agora valida a identidade do projeto:
+- `apps/frontend/index.html` deve ter `<title>` começando com **"Compare"**
+- `apps/backend/src/index.js` deve ter a rota `/compare` configurada
+
+Se o preflight reportar erro de identidade:
+```bash
+# Verifique o título do frontend
+cat apps/frontend/index.html | grep "<title>"
+
+# Verifique a rota do backend
+grep "/compare" apps/backend/src/index.js
+```
+
 ### Permissão negada no push
 Configure suas credenciais Git:
 ```powershell
