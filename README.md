@@ -114,6 +114,24 @@ Após o push, verifique se a branch realmente chegou ao GitHub:
 
 O script usa `git ls-remote` como método primário (não depende de autenticação/API) e a API do GitHub como fallback. Compara o SHA local com o remoto e sugere `git push` quando necessário. Isso evita falsos erros quando a API retorna 403 (rate limit).
 
+## Recuperação (Apps Ausentes)
+
+Se ao tentar executar ou iniciar você receber "**Diretorios apps/backend ou apps/frontend estao faltando**" ou erros com o `concurrently`, as seguintes etapas podem ajudar para você alternar da branch incorreta e instalar:
+
+```bash
+# 1. Busque e atualize ref do GitHub
+git fetch origin work
+
+# 2. Mude para a branch work (que contém as pastas dos apps)
+git checkout work
+
+# 3. Instale
+npm install
+
+# 4. Refaça o setup local
+npm run setup:windows
+```
+
 ## Criando Pull Request
 
 Após publicar a branch `work`, abra o PR no navegador:

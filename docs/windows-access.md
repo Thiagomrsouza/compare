@@ -133,9 +133,12 @@ Isso normalmente significa que o projeto está incompleto ou as dependências n�
 ```powershell
 npm run preflight
 ```
-2. Se informar erro, certifique-se de que as pastas `apps/backend` e `apps/frontend` existem. Você pode não ter clonado todas as pastas.
-3. Repita o comando de setup completo:
+2. O script vai diagnosticar sua situação (branch atual vs origin/work).
+3. Se estiver na `main` e houver uma branch `work` contendo o código, basta buscar e trocar (isso acontece se você clonou e e não fez switch de branch):
 ```powershell
+git fetch origin work
+git checkout work
+npm install
 npm run setup:windows
 ```
 

@@ -7,7 +7,7 @@
     "apps/backend"
   ],
   "scripts": {
-    "preflight": "node -e \"const fs=require('fs'); if(!fs.existsSync('apps/backend/package.json') || !fs.existsSync('apps/frontend/package.json')) { console.error('\\n[ERRO] Diretorios apps/backend ou apps/frontend estao faltando ou sem package.json.\\nVerifique se o repositorio foi clonado por completo e tente novamente.\\n'); process.exit(1); }\"",
+    "preflight": "node scripts/preflight.js",
     "predev": "npm run preflight",
     "dev": "concurrently \"npm run dev -w apps/backend\" \"npm run dev -w apps/frontend\"",
     "dev:frontend": "npm run dev -w apps/frontend",
