@@ -1,0 +1,11 @@
+
+=== Iniciando auto-reparo do Workspace ===
+Tentando restaurar apps/ diretamente da branch remota (origin/work)...
+
+> git fetch origin work
+Validando arvore remota de apps em origin/work...
+> git ls-tree origin/work -- apps
+
+[AVISO] origin/work nao contem apps/. Buscando refs em Pull Requests (origin/pr/*)...
+> git fetch origin "+refs/pull/*/head:refs/remotes/origin/pr/*"
+> git ls-tree origin/pr/1 -- apps

@@ -114,6 +114,16 @@ Após o push, verifique se a branch realmente chegou ao GitHub:
 
 O script usa `git ls-remote` como método primário (não depende de autenticação/API) e a API do GitHub como fallback. Compara o SHA local com o remoto e sugere `git push` quando necessário. Isso evita falsos erros quando a API retorna 403 (rate limit).
 
+## Diagnóstico Rápido de Apps no Remoto
+
+Para verificar rapidamente se `apps/backend` e `apps/frontend` existem no GitHub (em `origin/work` ou em alguma PR):
+
+```bash
+npm run inspect:remote-apps
+```
+
+O script faz fetch das referências remotas e lista quais possuem os apps completos, reduzindo o tempo de troubleshooting.
+
 ## Recuperação (Apps Ausentes)
 
 Se ao tentar executar ou iniciar você receber "**Diretorios apps/backend ou apps/frontend estao faltando**" ou erros com o `concurrently`, as seguintes etapas podem ajudar para você alternar da branch incorreta e instalar:

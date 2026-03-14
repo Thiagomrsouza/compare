@@ -108,6 +108,16 @@ git fetch --all --prune
 git status --short
 ```
 
+## Diagnóstico Rápido de Apps no Remoto
+
+Para saber antes de reparar se os apps estão publicados no GitHub:
+
+```powershell
+npm run inspect:remote-apps
+```
+
+O script verifica `origin/work` e todas as PRs abertas (`origin/pr/*`), listando quais têm `apps/backend` e `apps/frontend`.
+
 ## Troubleshooting
 
 ### "fatal: not a git repository"

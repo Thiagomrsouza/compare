@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "repair:workspace": "node scripts/repair-workspace.js",
+    "inspect:remote-apps": "node scripts/inspect-remote-apps.js",
     "preflight": "node scripts/preflight.js",
     "predev": "npm run preflight",
     "dev": "concurrently \"npm run dev -w apps/backend\" \"npm run dev -w apps/frontend\"",
