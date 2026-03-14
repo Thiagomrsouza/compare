@@ -14,7 +14,8 @@ compare/
 │   ├── publish-and-verify.ps1 # Publica e verifica (PowerShell)
 │   └── publish-and-verify.sh  # Publica e verifica (Bash)
 ├── docs/
-│   └── windows-access.md      # Guia de acesso no Windows
+│   └── windows-access.md      # Guia oficial de acesso no Windows
+├── windows-access.md          # Atalho na raiz para o guia do Windows
 └── README.md
 ```
 
