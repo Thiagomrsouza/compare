@@ -130,8 +130,10 @@ npm install
 npm run setup:windows
 ```
 
-### Se o auto-reparo não achar as pastas em `origin/work`
+### Se o auto-reparo não achar as pastas em `origin/work` (Nem Pull Requests)
 Isso significa que você nunca enviou as pastas para o GitHub na branch `work`.
+O script de auto-reparo tentará buscar automaticamente as aplicações do `origin/work` e também fará fallback inspecionando Pull Requests abertos (`origin/pr/*`). Se mesmo assim não achar:
+
 Dica de diagnóstico: digite `git ls-tree origin/work -- apps`. Se não retornar nada, o repositório no GitHub não tem a pasta apps.
 
 Vá para onde elas foram originais criadas:

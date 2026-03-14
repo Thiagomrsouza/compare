@@ -144,7 +144,8 @@ npm install
 npm run setup:windows
 ```
 
-### E se o auto-reparo reportar que os arquivos não estão em origin/work?
+### E se o auto-reparo reportar que os arquivos não estão no repositório?
+O script tenta restaurar através do `origin/work` ou inspecionando todas as requests de pull abertas (`origin/pr/*`).
 Dica de diagnóstico: Você pode confirmar se os apps estão no remote via `git ls-tree origin/work -- apps`.
 
 Vá ao seu computador ou pasta onde o `frontend` e `backend` foram programados e faça o upload:

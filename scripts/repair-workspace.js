@@ -26,12 +26,35 @@ console.log('Tentando restaurar apps/ diretamente da branch remota (origin/work)
 
 run('git fetch origin work');
 
-console.log('Validando arvore remota de apps...');
-const treeCheck = runCapture('git ls-tree origin/work -- apps');
+console.log('Validando arvore remota de apps em origin/work...');
+let targetBranch = 'origin/work';
+let treeCheck = runCapture('git ls-tree origin/work -- apps');
 
 if (!treeCheck || treeCheck.length === 0) {
-  console.error('\n[ERRO] A arvore remota origin/work nao contem o diretorio apps/ (git ls-tree vazio).');
-  console.error('A branch origin/work no GitHub ainda NAO contém esses repositorios. O código fonte ainda não foi publicado!');
+  console.log('\n[AVISO] origin/work nao contem apps/. Buscando refs em Pull Requests (origin/pr/*)...');
+  runCapture('git fetch origin "+refs/pull/*/head:refs/remotes/origin/pr/*"');
+  
+  try {
+    const prRefsRaw = execSync('git for-each-ref --format="%(refname:short)" refs/remotes/origin/pr/', {encoding: 'utf8'}).trim();
+    if (prRefsRaw) {
+      const prRefs = prRefsRaw.split('\\n');
+      for (const prRef of prRefs) {
+        if (!prRef) continue;
+        const prTreeCheck = runCapture(`git ls-tree ${prRef} -- apps`);
+        if (prTreeCheck && prTreeCheck.length > 0) {
+          console.log(`[SUCESSO] Modulos apps/ encontrados na ref: ${prRef}! Utilizando como fallback.`);
+          targetBranch = prRef;
+          treeCheck = prTreeCheck;
+          break;
+        }
+      }
+    }
+  } catch(e) {}
+}
+
+if (!treeCheck || treeCheck.length === 0) {
+  console.error('\n[ERRO] Nenhuma ref contem o diretorio apps/ (nem origin/work, nem origin/pr/*).');
+  console.error('O código fonte ainda não foi publicado!');
   console.error('=== COMO CORRIGIR (No ambiente onde o código foi criado) ===');
   console.error('1. cd /caminho/do/projeto/original');
   console.error('2. git add apps/');
@@ -41,8 +64,8 @@ if (!treeCheck || treeCheck.length === 0) {
   process.exit(1);
 }
 
-const backendRestore = run('git checkout origin/work -- apps/backend');
-const frontendRestore = run('git checkout origin/work -- apps/frontend');
+const backendRestore = run(`git checkout ${targetBranch} -- apps/backend`);
+const frontendRestore = run(`git checkout ${targetBranch} -- apps/frontend`);
 
 const missing = [];
 if (!fs.existsSync('apps/backend/package.json')) missing.push('apps/backend');
