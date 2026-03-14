@@ -40,6 +40,9 @@ cd /caminho/para/compare
 
 # Publicar e já validar
 ./scripts/publish-and-verify.sh --create-from-main
+
+# Com flags explícitas (URL, Branch, Push to Main)
+./scripts/publish-and-verify.sh --repo-url "https://github.com/Thiagomrsouza/compare.git" -b "work" --create-from-main --push-to-main
 ```
 
 ## Comandos Individuais (Apenas Publicação)
