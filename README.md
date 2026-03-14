@@ -119,16 +119,14 @@ O script usa `git ls-remote` como método primário (não depende de autenticaç
 Se ao tentar executar ou iniciar você receber "**Diretorios apps/backend ou apps/frontend estao faltando**" ou erros com o `concurrently`, as seguintes etapas podem ajudar para você alternar da branch incorreta e instalar:
 
 ```bash
-# 1. Busque e atualize ref do GitHub
-git fetch origin work
+# Tente usar a ferramenta automatica de reparo
+npm run repair:workspace
+```
 
-# 2. Mude para a branch work (que contém as pastas dos apps)
-git checkout work
+Se o script resolver o problema, ele pedirá para que você faça a instalação padrão depois:
 
-# 3. Instale
+```bash
 npm install
-
-# 4. Refaça o setup local
 npm run setup:windows
 ```
 

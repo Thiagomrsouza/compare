@@ -24,23 +24,10 @@ if (missing.length > 0) {
   const hasOrigin = run('git remote -v');
   const hasOriginWork = hasOrigin ? run('git ls-remote --heads origin work') : null;
   
-  if (currentBranch === 'main' && hasOriginWork) {
-    console.error('\n[SOLUCAO] Voce esta na branch "main", mas o codigo pode estar na branch "work".');
-    console.error('Execute os seguintes comandos para recuperar o projeto:');
-    if (process.platform === 'win32') {
-      console.error('\n  git fetch origin work');
-      console.error('  git checkout work');
-      console.error('  npm install');
-      console.error('  npm run setup:windows');
-    } else {
-      console.error('\n  git fetch origin work');
-      console.error('  git checkout work');
-      console.error('  npm install');
-      console.error('  npm run setup:windows'); // they might have a different setup script for linux but setup:windows is what was provided
-    }
-  } else {
-    console.error('\n[SOLUCAO] Verifique se o repositorio foi clonado por completo ou baixe o zip novamente.');
-  }
+  // always suggest the repair workspace command
+  console.error('\n[SOLUCAO] Para tentar restaurar o workspace (baixar apps da branch remota work automagicamente),');
+  console.error('execute o comando de auto-reparo:');
+  console.error('\n  npm run repair:workspace\n');
   
   console.error();
   process.exit(1);

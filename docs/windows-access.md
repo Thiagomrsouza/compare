@@ -133,11 +133,13 @@ Isso normalmente significa que o projeto está incompleto ou as dependências n�
 ```powershell
 npm run preflight
 ```
-2. O script vai diagnosticar sua situação (branch atual vs origin/work).
-3. Se estiver na `main` e houver uma branch `work` contendo o código, basta buscar e trocar (isso acontece se você clonou e e não fez switch de branch):
+2. O script vai diagnosticar sua situação e sugerir o auto-reparo.
+3. Tente a reparação automática (ela rastreia a branch `work` no servidor):
 ```powershell
-git fetch origin work
-git checkout work
+npm run repair:workspace
+```
+4. Se ele restaurar, instale os pacotes e refaça o setup:
+```powershell
 npm install
 npm run setup:windows
 ```
