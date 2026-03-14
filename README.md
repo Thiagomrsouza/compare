@@ -19,13 +19,29 @@ compare/
 └── README.md
 ```
 
-## Publicação e Validação com 1 Comando (Recomendado)
+## Acesso completo via Windows (Setup Local)
 
-A forma mais fácil de publicar a branch e já garantir que ela chegou ao GitHub:
+Para inicializar todo o projeto, instalar dependências e rodar no Windows (preparado para rede local):
 
-### Windows (PowerShell)
+### PowerShell (Recomendado)
 
 ```powershell
+npm run setup:windows
+npm run dev:windows
+```
+
+### Prompt de Comando (CMD)
+
+```bat
+npm run setup:windows:cmd
+npm run dev:windows:cmd
+```
+
+Isso cria os `.env` automaticamente e sobe o backend/frontend usando `concurrently`.
+
+---
+
+## Publicação e Validação com 1 Comando (Recomendado)
 # Entrar na pasta do projeto
 cd C:\Users\guest\projetos\compare
 

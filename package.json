@@ -1,0 +1,23 @@
+{
+  "name": "compare",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w apps/backend\" \"npm run dev -w apps/frontend\"",
+    "dev:frontend": "npm run dev -w apps/frontend",
+    "dev:backend": "npm run dev -w apps/backend",
+    "build": "npm run build -w apps/backend && npm run build -w apps/frontend",
+    "start": "npm run start -w apps/backend",
+    "setup:windows": "powershell -ExecutionPolicy Bypass -File ./scripts/windows-setup.ps1",
+    "dev:windows": "powershell -ExecutionPolicy Bypass -File ./scripts/windows-dev.ps1",
+    "setup:windows:cmd": "cmd /c .\\scripts\\windows-setup.cmd",
+    "dev:windows:cmd": "cmd /c .\\scripts\\windows-dev.cmd"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

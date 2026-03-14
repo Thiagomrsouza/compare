@@ -1,22 +1,36 @@
-# Guia de Acesso no Windows
+# Acesso pelo Windows (localhost e rede local)
 
-## Pré-requisitos
+Se você estiver executando o projeto no Windows e não estiver vendo as mudanças no navegador:
 
-- [Git para Windows](https://git-scm.com/download/win) instalado
-- PowerShell 5.1+ (incluído no Windows 10/11)
-- Acesso ao repositório: https://github.com/Thiagomrsouza/compare
-
-## Setup Inicial
-
+## 0) Setup completo (recomendado)
 ```powershell
-# Clonar o repositório
-cd C:\Users\guest\projetos
-git clone https://github.com/Thiagomrsouza/compare.git
-cd compare
+npm run setup:windows
+npm run dev:windows
+```
 
-# Verificar estado
-git branch -vv
-git remote -v
+## 0.1) Setup completo (CMD)
+```bat
+npm run setup:windows:cmd
+npm run dev:windows:cmd
+```
+
+## 1) Suba backend e frontend
+```bash
+npm install
+npm run dev
+```
+
+## 2) Abra a URL correta do frontend
+- Local: `http://localhost:5173`
+- Rede local (outro dispositivo): `http://SEU_IP_LOCAL:5173`
+
+> O Vite está configurado com `host: 0.0.0.0`, então aceita conexões de rede local.
+
+## 3) CORS no backend
+No `apps/backend/.env`, ajuste `FRONTEND_ORIGINS` com os hosts usados pelo navegador, por exemplo:
+
+```env
+FRONTEND_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://192.168.0.10:5173
 ```
 
 ## Publicar e Validar (Recomendado)
