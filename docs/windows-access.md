@@ -19,7 +19,18 @@ git branch -vv
 git remote -v
 ```
 
-## Publicar Branch Work
+## Publicar e Validar (Recomendado)
+
+O jeito mais fácil e seguro de publicar a branch e já validar se subiu:
+
+```powershell
+cd C:\Users\guest\projetos\compare
+./scripts/publish-and-verify.ps1 -CreateFromMain
+```
+
+---
+
+## Passos Manuais (Opcional)
 
 ### Passo 1 — Criar e publicar a branch work
 

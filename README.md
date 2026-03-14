@@ -10,13 +10,38 @@ compare/
 │   ├── publish-work.ps1       # Publica branch work (PowerShell)
 │   ├── publish-work.sh        # Publica branch work (Bash)
 │   ├── check-remote-sync.ps1  # Verifica sync com GitHub (PowerShell)
-│   └── check-remote-sync.sh   # Verifica sync com GitHub (Bash)
+│   ├── check-remote-sync.sh   # Verifica sync com GitHub (Bash)
+│   ├── publish-and-verify.ps1 # Publica e verifica (PowerShell)
+│   └── publish-and-verify.sh  # Publica e verifica (Bash)
 ├── docs/
 │   └── windows-access.md      # Guia de acesso no Windows
 └── README.md
 ```
 
-## Publicação com 1 Comando
+## Publicação e Validação com 1 Comando (Recomendado)
+
+A forma mais fácil de publicar a branch e já garantir que ela chegou ao GitHub:
+
+### Windows (PowerShell)
+
+```powershell
+# Entrar na pasta do projeto
+cd C:\Users\guest\projetos\compare
+
+# Publicar e já validar se subiu
+./scripts/publish-and-verify.ps1 -CreateFromMain
+```
+
+### Linux / Git Bash
+
+```bash
+cd /caminho/para/compare
+
+# Publicar e já validar
+./scripts/publish-and-verify.sh --create-from-main
+```
+
+## Comandos Individuais (Apenas Publicação)
 
 ### Windows (PowerShell)
 
