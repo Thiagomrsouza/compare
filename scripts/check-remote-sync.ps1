@@ -3,9 +3,8 @@
     Verifica se a branch local está sincronizada com o GitHub.
 
 .DESCRIPTION
-    Compara o SHA do commit local com o commit remoto via API do GitHub.
-    Mostra se a branch existe no remote e se está atualizada.
-    Sugere git push quando necessário.
+    Usa git ls-remote como método primário (mais confiável) e API do GitHub
+    como fallback. Isso evita falsos erros quando a API retorna 403.
 
 .PARAMETER RepoUrl
     URL do repositório. Padrão: https://github.com/Thiagomrsouza/compare.git
@@ -26,6 +25,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 Write-Host "`n=== check-remote-sync ===" -ForegroundColor Cyan
+Write-Host "[INFO] Metodo: git ls-remote (primario) + API GitHub (fallback)" -ForegroundColor Gray
 
 # 1. Verificar repositório Git
 if (-not (Test-Path ".git")) {
@@ -45,20 +45,51 @@ if (-not $localBranch) {
 $localSha = git rev-parse $BranchName 2>&1
 Write-Host "[LOCAL]  Branch '$BranchName' -> $localSha" -ForegroundColor White
 
-# 3. Extrair owner/repo da URL
-$repoPath = $RepoUrl -replace '\.git$', '' -replace 'https://github.com/', ''
-$apiUrl = "https://api.github.com/repos/$repoPath/branches/$BranchName"
+# 3. Método primário: git ls-remote (não depende de API/autenticação)
+Write-Host "[INFO] Verificando via git ls-remote..." -ForegroundColor Yellow
+$remoteSha = $null
+$lsRemoteSuccess = $false
 
-# 4. Consultar API do GitHub
-Write-Host "[INFO] Consultando GitHub API..." -ForegroundColor Yellow
 try {
-    $response = Invoke-RestMethod -Uri $apiUrl -Method Get -ErrorAction Stop
-    $remoteSha = $response.commit.sha
-    Write-Host "[REMOTE] Branch '$BranchName' -> $remoteSha" -ForegroundColor White
+    $lsRemoteOutput = git ls-remote --heads origin $BranchName 2>&1
+    if ($lsRemoteOutput -and $lsRemoteOutput -match $BranchName) {
+        $remoteSha = ($lsRemoteOutput -split "\s+")[0]
+        $lsRemoteSuccess = $true
+        Write-Host "[REMOTE] Branch '$BranchName' -> $remoteSha (via ls-remote)" -ForegroundColor White
+    } else {
+        Write-Host "[REMOTE] Branch '$BranchName' NAO encontrada via ls-remote." -ForegroundColor Yellow
+    }
+} catch {
+    Write-Host "[AVISO] git ls-remote falhou: $_" -ForegroundColor Yellow
+}
 
-    # 5. Comparar
+# 4. Fallback: API do GitHub (se ls-remote não resolveu)
+if (-not $lsRemoteSuccess) {
+    $repoPath = $RepoUrl -replace '\.git$', '' -replace 'https://github.com/', ''
+    $apiUrl = "https://api.github.com/repos/$repoPath/branches/$BranchName"
+
+    Write-Host "[INFO] Tentando fallback via API do GitHub..." -ForegroundColor Yellow
+    try {
+        $response = Invoke-RestMethod -Uri $apiUrl -Method Get -ErrorAction Stop
+        $remoteSha = $response.commit.sha
+        $lsRemoteSuccess = $true
+        Write-Host "[REMOTE] Branch '$BranchName' -> $remoteSha (via API)" -ForegroundColor White
+    } catch {
+        $statusCode = $_.Exception.Response.StatusCode.value__
+        if ($statusCode -eq 404) {
+            Write-Host "[REMOTE] Branch '$BranchName' NAO EXISTE no GitHub!" -ForegroundColor Red
+        } elseif ($statusCode -eq 403) {
+            Write-Host "[AVISO] API do GitHub retornou 403 (rate limit ou acesso restrito)." -ForegroundColor Yellow
+        } else {
+            Write-Host "[ERRO] API falhou com HTTP $statusCode" -ForegroundColor Red
+        }
+    }
+}
+
+# 5. Comparar resultados
+if ($lsRemoteSuccess -and $remoteSha) {
     if ($localSha -eq $remoteSha) {
-        Write-Host "`n[OK] Branch '$BranchName' esta sincronizada com o GitHub!" -ForegroundColor Green
+        Write-Host "`n[OK] Branch '$BranchName' esta SINCRONIZADA com o GitHub!" -ForegroundColor Green
     } else {
         Write-Host "`n[AVISO] Branch '$BranchName' esta DESSINCRONIZADA!" -ForegroundColor Yellow
         Write-Host "  Local:  $localSha" -ForegroundColor White
@@ -66,35 +97,10 @@ try {
         Write-Host "`n  Para sincronizar, execute:" -ForegroundColor Cyan
         Write-Host "    git push -u origin $BranchName" -ForegroundColor Green
     }
-} catch {
-    $statusCode = $_.Exception.Response.StatusCode.value__
-
-    if ($statusCode -eq 404) {
-        Write-Host "[REMOTE] Branch '$BranchName' NAO EXISTE no GitHub!" -ForegroundColor Red
-        Write-Host "`n  A branch existe localmente mas nao foi enviada." -ForegroundColor Yellow
-        Write-Host "  Para publicar, execute:" -ForegroundColor Cyan
-        Write-Host "    git push -u origin $BranchName" -ForegroundColor Green
-    } elseif ($statusCode -eq 403) {
-        Write-Host "[AVISO] API do GitHub retornou 403 (rate limit ou acesso restrito)." -ForegroundColor Yellow
-        Write-Host "  Fallback: verificando via git ls-remote..." -ForegroundColor Yellow
-
-        $lsRemote = git ls-remote --heads origin $BranchName 2>&1
-        if ($lsRemote -match $BranchName) {
-            $remoteSha = ($lsRemote -split "\s+")[0]
-            Write-Host "[REMOTE] Branch '$BranchName' -> $remoteSha" -ForegroundColor White
-            if ($localSha -eq $remoteSha) {
-                Write-Host "`n[OK] Sincronizada!" -ForegroundColor Green
-            } else {
-                Write-Host "`n[AVISO] Dessincronizada! Execute: git push -u origin $BranchName" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "[REMOTE] Branch '$BranchName' NAO encontrada no remote." -ForegroundColor Red
-            Write-Host "  Execute: git push -u origin $BranchName" -ForegroundColor Green
-        }
-    } else {
-        Write-Host "[ERRO] Falha ao consultar API: $_" -ForegroundColor Red
-        Write-Host "  Fallback: git push -u origin $BranchName" -ForegroundColor Green
-    }
+} else {
+    Write-Host "`n[RESULTADO] Branch '$BranchName' existe localmente mas NAO no remote." -ForegroundColor Red
+    Write-Host "  Para publicar, execute:" -ForegroundColor Cyan
+    Write-Host "    git push -u origin $BranchName" -ForegroundColor Green
 }
 
 # 6. Resumo

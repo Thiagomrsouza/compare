@@ -67,7 +67,7 @@ Após o push, verifique se a branch realmente chegou ao GitHub:
 ./scripts/check-remote-sync.sh "https://github.com/Thiagomrsouza/compare.git" "work"
 ```
 
-O script compara o SHA local com o remoto via API do GitHub e sugere `git push` quando necessário.
+O script usa `git ls-remote` como método primário (não depende de autenticação/API) e a API do GitHub como fallback. Compara o SHA local com o remoto e sugere `git push` quando necessário. Isso evita falsos erros quando a API retorna 403 (rate limit).
 
 ## Criando Pull Request
 
